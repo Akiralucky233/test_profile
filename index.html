@@ -1,0 +1,1847 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IT技术顾问 | 专业服务</title>
+  <style>
+    /* ========================================
+       CSS Variables - 配色系统
+       ======================================== */
+    :root {
+      --bg-primary: #0a1628;
+      --bg-secondary: #0d1f3c;
+      --bg-card: rgba(13, 31, 60, 0.85);
+      --accent-cyan: #00d4ff;
+      --accent-cyan-dim: rgba(0, 212, 255, 0.15);
+      --accent-cyan-glow: rgba(0, 212, 255, 0.4);
+      --text-primary: #ffffff;
+      --text-secondary: #8a9bb5;
+      --text-muted: #5a6a85;
+      --border-subtle: rgba(0, 212, 255, 0.12);
+      --border-active: rgba(0, 212, 255, 0.5);
+      --shadow-card: 0 8px 32px rgba(0, 0, 0, 0.4);
+      --shadow-card-hover: 0 16px 48px rgba(0, 0, 0, 0.6), 0 0 24px rgba(0, 212, 255, 0.15);
+      --transition-base: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      --font-display: "PingFang SC", "Microsoft YaHei", "Helvetica Neue", sans-serif;
+      --font-body: "PingFang SC", "Microsoft YaHei", "Helvetica Neue", sans-serif;
+    }
+
+    /* ========================================
+       Reset & Base
+       ======================================== */
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      font-size: 16px;
+    }
+
+    body {
+      font-family: var(--font-body);
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      line-height: 1.7;
+      min-height: 100vh;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ========================================
+       Background Effects
+       ======================================== */
+    .bg-grid {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: 
+        linear-gradient(rgba(0, 212, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 212, 255, 0.03) 1px, transparent 1px);
+      background-size: 60px 60px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .bg-glow {
+      position: fixed;
+      width: 600px;
+      height: 600px;
+      border-radius: 50%;
+      filter: blur(120px);
+      opacity: 0.08;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .bg-glow--top {
+      top: -200px;
+      right: -100px;
+      background: var(--accent-cyan);
+    }
+
+    .bg-glow--bottom {
+      bottom: -200px;
+      left: -100px;
+      background: var(--accent-cyan);
+    }
+
+    /* ========================================
+       Layout
+       ======================================== */
+    .container {
+      position: relative;
+      z-index: 1;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* ========================================
+       Navigation
+       ======================================== */
+    .nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 100;
+      padding: 20px 0;
+      background: linear-gradient(to bottom, var(--bg-primary), transparent);
+      transition: var(--transition-base);
+    }
+
+    .nav__inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .nav__logo {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      text-decoration: none;
+      letter-spacing: 0.5px;
+    }
+
+    .nav__logo span {
+      color: var(--accent-cyan);
+    }
+
+    .nav__cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 20px;
+      background: transparent;
+      border: 1px solid var(--border-active);
+      border-radius: 6px;
+      color: var(--accent-cyan);
+      font-size: 0.875rem;
+      font-weight: 500;
+      text-decoration: none;
+      cursor: pointer;
+      transition: var(--transition-base);
+    }
+
+    .nav__cta:hover {
+      background: var(--accent-cyan-dim);
+      box-shadow: 0 0 20px rgba(0, 212, 255, 0.2);
+    }
+
+    /* ========================================
+       Hero Section
+       ======================================== */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 120px 24px 80px;
+    }
+
+    .hero__badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 16px;
+      background: var(--accent-cyan-dim);
+      border: 1px solid var(--border-subtle);
+      border-radius: 100px;
+      font-size: 0.8125rem;
+      color: var(--accent-cyan);
+      margin-bottom: 32px;
+      animation: fadeInUp 0.6s ease-out;
+    }
+
+    .hero__badge::before {
+      content: '';
+      width: 6px;
+      height: 6px;
+      background: var(--accent-cyan);
+      border-radius: 50%;
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    .hero__title {
+      font-size: clamp(2.5rem, 6vw, 4rem);
+      font-weight: 700;
+      line-height: 1.15;
+      letter-spacing: -1px;
+      margin-bottom: 24px;
+      animation: fadeInUp 0.6s ease-out 0.1s both;
+    }
+
+    .hero__title em {
+      font-style: normal;
+      color: var(--accent-cyan);
+    }
+
+    .hero__subtitle {
+      font-size: clamp(1rem, 2vw, 1.25rem);
+      color: var(--text-secondary);
+      max-width: 600px;
+      margin-bottom: 48px;
+      animation: fadeInUp 0.6s ease-out 0.2s both;
+    }
+
+    .hero__actions {
+      display: flex;
+      gap: 16px;
+      animation: fadeInUp 0.6s ease-out 0.3s both;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 14px 28px;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 500;
+      text-decoration: none;
+      cursor: pointer;
+      transition: var(--transition-base);
+      border: none;
+    }
+
+    .btn--primary {
+      background: var(--accent-cyan);
+      color: var(--bg-primary);
+    }
+
+    .btn--primary:hover {
+      background: #33ddff;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(0, 212, 255, 0.3);
+    }
+
+    .btn--secondary {
+      background: transparent;
+      border: 1px solid var(--border-subtle);
+      color: var(--text-primary);
+    }
+
+    .btn--secondary:hover {
+      border-color: var(--border-active);
+      background: var(--accent-cyan-dim);
+    }
+
+    .hero__scroll {
+      display: none !important;
+    }
+
+    .hero__scroll-icon {
+      width: 24px;
+      height: 36px;
+      border: 2px solid var(--text-muted);
+      border-radius: 12px;
+      position: relative;
+    }
+
+    .hero__scroll-icon::after {
+      content: '';
+      position: absolute;
+      top: 6px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 3px;
+      height: 8px;
+      background: var(--accent-cyan);
+      border-radius: 2px;
+      animation: scrollDot 1.5s ease-in-out infinite;
+    }
+
+    /* ========================================
+       Cards Grid Section
+       ======================================== */
+    .cards-section {
+      padding: 80px 0 120px;
+    }
+
+    .cards-section__header {
+      text-align: center;
+      margin-bottom: 64px;
+    }
+
+    .cards-section__label {
+      display: inline-block;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      color: var(--accent-cyan);
+      margin-bottom: 16px;
+    }
+
+    .cards-section__title {
+      font-size: clamp(1.75rem, 4vw, 2.5rem);
+      font-weight: 600;
+      margin-bottom: 16px;
+    }
+
+    .cards-section__desc {
+      color: var(--text-secondary);
+      max-width: 500px;
+      margin: 0 auto;
+    }
+
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 24px;
+    }
+
+    @media (max-width: 1024px) {
+      .cards-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 640px) {
+      .cards-grid {
+        grid-template-columns: 1fr;
+        max-width: 400px;
+        margin: 0 auto;
+      }
+    }
+
+    /* ========================================
+       Card Component
+       ======================================== */
+    .card {
+      position: relative;
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 16px;
+      padding: 32px 28px;
+      text-decoration: none;
+      color: inherit;
+      transition: var(--transition-base);
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--accent-cyan), transparent);
+      opacity: 0;
+      transition: var(--transition-base);
+    }
+
+    .card:hover {
+      transform: translateY(-4px) scale(1.02);
+      border-color: var(--border-active);
+      box-shadow: var(--shadow-card-hover);
+    }
+
+    .card:hover::before {
+      opacity: 1;
+    }
+
+    .card__icon {
+      width: 56px;
+      height: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--accent-cyan-dim);
+      border-radius: 12px;
+      margin-bottom: 24px;
+      font-size: 1.5rem;
+      transition: var(--transition-base);
+    }
+
+    .card:hover .card__icon {
+      background: rgba(0, 212, 255, 0.25);
+      box-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
+    }
+
+    .card__title {
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+
+    .card__desc {
+      font-size: 0.9375rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
+      margin-bottom: 20px;
+    }
+
+    .card__link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.875rem;
+      color: var(--accent-cyan);
+      font-weight: 500;
+      opacity: 0;
+      transform: translateX(-8px);
+      transition: var(--transition-base);
+    }
+
+    .card:hover .card__link {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    .card__link svg {
+      width: 16px;
+      height: 16px;
+      transition: transform var(--transition-base);
+    }
+
+    .card:hover .card__link svg {
+      transform: translateX(4px);
+    }
+
+    /* ========================================
+       Content Sections (展开区域)
+       ======================================== */
+    .content-section {
+      padding: 80px 0;
+      border-top: 1px solid var(--border-subtle);
+      display: none;
+    }
+
+    .content-section.active {
+      display: block;
+    }
+
+    .content-section__inner {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .content-section__header {
+      margin-bottom: 48px;
+    }
+
+    .content-section__back {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--text-secondary);
+      font-size: 0.875rem;
+      text-decoration: none;
+      margin-bottom: 24px;
+      transition: var(--transition-base);
+    }
+
+    .content-section__back:hover {
+      color: var(--accent-cyan);
+    }
+
+    .content-section__title {
+      font-size: 2rem;
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+
+    .content-section__subtitle {
+      color: var(--text-secondary);
+      font-size: 1.125rem;
+    }
+
+    .content-block {
+      margin-bottom: 48px;
+    }
+
+    .content-block__title {
+      font-size: 1.125rem;
+      font-weight: 600;
+      margin-bottom: 16px;
+      color: var(--accent-cyan);
+    }
+
+    .content-block p {
+      color: var(--text-secondary);
+      line-height: 1.8;
+    }
+
+    .skill-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 16px;
+    }
+
+    .skill-tag {
+      display: inline-block;
+      padding: 8px 16px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 6px;
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+      transition: var(--transition-base);
+    }
+
+    .skill-tag:hover {
+      border-color: var(--accent-cyan);
+      color: var(--accent-cyan);
+    }
+
+    .service-list {
+      list-style: none;
+    }
+
+    .service-list li {
+      display: flex;
+      gap: 16px;
+      padding: 20px 0;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .service-list li:last-child {
+      border-bottom: none;
+    }
+
+    .service-list__icon {
+      width: 40px;
+      height: 40px;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--accent-cyan-dim);
+      border-radius: 8px;
+      color: var(--accent-cyan);
+    }
+
+    .service-list__content h4 {
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .service-list__content p {
+      font-size: 0.9375rem;
+      color: var(--text-secondary);
+    }
+
+    .case-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      padding: 28px;
+      margin-bottom: 24px;
+    }
+
+    .case-card__meta {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .case-card__tag {
+      padding: 4px 10px;
+      background: var(--accent-cyan-dim);
+      border-radius: 4px;
+      font-size: 0.75rem;
+      color: var(--accent-cyan);
+    }
+
+    .case-card__title {
+      font-size: 1.125rem;
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+
+    .case-card__desc {
+      color: var(--text-secondary);
+      font-size: 0.9375rem;
+      line-height: 1.7;
+      margin-bottom: 16px;
+    }
+
+    .case-card__metrics {
+      display: flex;
+      gap: 32px;
+    }
+
+    .case-card__metric {
+      text-align: left;
+    }
+
+    .case-card__metric-value {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--accent-cyan);
+    }
+
+    .case-card__metric-label {
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+    }
+
+    .blog-list {
+      list-style: none;
+    }
+
+    .blog-item {
+      display: flex;
+      gap: 20px;
+      padding: 20px 0;
+      border-bottom: 1px solid var(--border-subtle);
+      transition: var(--transition-base);
+    }
+
+    .blog-item:hover {
+      padding-left: 8px;
+    }
+
+    .blog-item:last-child {
+      border-bottom: none;
+    }
+
+    .blog-item__date {
+      flex-shrink: 0;
+      width: 60px;
+      text-align: center;
+      padding-top: 4px;
+    }
+
+    .blog-item__day {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: var(--accent-cyan);
+      line-height: 1;
+    }
+
+    .blog-item__month {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+    }
+
+    .blog-item__content h4 {
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+
+    .blog-item__content p {
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+    }
+
+    /* ========================================
+       Contact Section
+       ======================================== */
+    .contact {
+      padding: 80px 0 120px;
+      text-align: center;
+    }
+
+    .contact__title {
+      font-size: clamp(1.75rem, 4vw, 2.5rem);
+      font-weight: 600;
+      margin-bottom: 16px;
+    }
+
+    .contact__desc {
+      color: var(--text-secondary);
+      max-width: 500px;
+      margin: 0 auto 48px;
+    }
+
+    .contact__email {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      padding: 16px 32px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 8px;
+      font-size: 1.125rem;
+      color: var(--text-primary);
+      text-decoration: none;
+      transition: var(--transition-base);
+      margin-bottom: 48px;
+    }
+
+    .contact__email:hover {
+      border-color: var(--accent-cyan);
+      box-shadow: 0 0 24px rgba(0, 212, 255, 0.15);
+    }
+
+    .contact__email svg {
+      color: var(--accent-cyan);
+    }
+
+    .social-links {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+    }
+
+    .social-link {
+      width: 48px;
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      color: var(--text-secondary);
+      text-decoration: none;
+      transition: var(--transition-base);
+    }
+
+    .social-link:hover {
+      color: var(--accent-cyan);
+      border-color: var(--accent-cyan);
+      transform: translateY(-2px);
+    }
+
+    /* ========================================
+       Footer
+       ======================================== */
+    .footer {
+      padding: 32px 0;
+      border-top: 1px solid var(--border-subtle);
+      text-align: center;
+    }
+
+    .footer p {
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+    }
+
+    .footer span {
+      color: var(--accent-cyan);
+    }
+
+    /* ========================================
+       Animations
+       ======================================== */
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(24px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes pulse {
+      0%, 100% {
+        opacity: 1;
+      }
+      50% {
+        opacity: 0.4;
+      }
+    }
+
+    @keyframes scrollDot {
+      0%, 100% {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+      }
+      50% {
+        opacity: 0.3;
+        transform: translateX(-50%) translateY(6px);
+      }
+    }
+
+    /* ========================================
+       Responsive
+       ======================================== */
+    @media (max-width: 768px) {
+      .hero {
+        padding: 100px 20px 60px;
+      }
+
+      .hero__actions {
+        flex-direction: column;
+        width: 100%;
+        max-width: 280px;
+      }
+
+      .hero__actions .btn {
+        width: 100%;
+        justify-content: center;
+      }
+
+      .hero__scroll {
+        display: none;
+      }
+
+      .cards-section {
+        padding: 60px 0 80px;
+      }
+
+      .cards-section__header {
+        margin-bottom: 40px;
+      }
+
+      .card {
+        padding: 24px;
+      }
+
+      .contact {
+        padding: 60px 0 80px;
+      }
+
+      .contact__email {
+        font-size: 1rem;
+        padding: 14px 24px;
+      }
+    }
+
+    /* ========================================
+       SVG Icons (inline, no external deps)
+       ======================================== */
+    .icon {
+      width: 24px;
+      height: 24px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+  </style>
+</head>
+<body>
+  <!-- Background Effects -->
+  <div class="bg-grid"></div>
+  <div class="bg-glow bg-glow--top"></div>
+  <div class="bg-glow bg-glow--bottom"></div>
+
+  <!-- Navigation -->
+  <nav class="nav">
+    <div class="container nav__inner">
+      <a href="#" class="nav__logo">Tech<span>.</span>Consultant</a>
+      <a href="#contact" class="nav__cta">
+        <svg class="icon" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        联系我
+      </a>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="hero" id="hero">
+    <div class="hero__badge">高级前端工程师</div>
+    <h1 class="hero__title">志辉<br/>构建<em>卓越数字体验</em></h1>
+    <p class="hero__subtitle">字节跳动高级前端工程师，6年+前端开发经验，专注React生态、前端工程化与性能优化</p>
+    <div class="hero__actions">
+      <a href="#cards" class="btn btn--primary">探索服务</a>
+      <a href="#about" class="btn btn--secondary" data-card="about">了解更多</a>
+    </div>
+    <div class="hero__scroll">
+      <div class="hero__scroll-icon"></div>
+      <span>向下滚动</span>
+    </div>
+  </section>
+
+  <!-- Cards Section -->
+  <section class="cards-section" id="cards">
+    <div class="container">
+      <div class="cards-section__header">
+        <span class="cards-section__label">服务领域</span>
+        <h2 class="cards-section__title">全方位技术咨询服务</h2>
+        <p class="cards-section__desc">从战略规划到落地实施，陪伴企业穿越技术变革周期</p>
+      </div>
+      <div class="cards-grid">
+        <!-- Card: About -->
+        <a href="#about" class="card" data-card="about">
+          <div class="card__icon">
+            <svg class="icon" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          </div>
+          <h3 class="card__title">关于我</h3>
+          <p class="card__desc">15年+技术从业经验，曾主导多个大型系统架构设计与数字化转型项目</p>
+          <span class="card__link">
+            查看详情
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </span>
+        </a>
+
+        <!-- Card: Services -->
+        <a href="#services" class="card" data-card="services">
+          <div class="card__icon">
+            <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+          </div>
+          <h3 class="card__title">服务内容</h3>
+          <p class="card__desc">涵盖架构设计、技术选型、团队建设等全栈咨询服务</p>
+          <span class="card__link">
+            查看详情
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </span>
+        </a>
+
+        <!-- Card: Cases -->
+        <a href="#cases" class="card" data-card="cases">
+          <div class="card__icon">
+            <svg class="icon" viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          </div>
+          <h3 class="card__title">成功案例</h3>
+          <p class="card__desc">帮助30+家企业完成技术升级，平均项目ROI提升40%</p>
+          <span class="card__link">
+            查看详情
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </span>
+        </a>
+
+        <!-- Card: Blog -->
+        <a href="#blog" class="card" data-card="blog">
+          <div class="card__icon">
+            <svg class="icon" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+          </div>
+          <h3 class="card__title">技术博客</h3>
+          <p class="card__desc">沉淀技术思考，记录架构演进，探讨行业趋势</p>
+          <span class="card__link">
+            查看详情
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Content: About -->
+  <section class="content-section" id="about">
+    <div class="container content-section__inner">
+      <div class="content-section__header">
+        <a href="#cards" class="content-section__back">
+          <svg class="icon" viewBox="0 0 24 24" width="16" height="16"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+          返回
+        </a>
+        <h2 class="content-section__title">关于我</h2>
+        <p class="content-section__subtitle">一位深耕技术领域多年的实践者</p>
+      </div>
+
+      <div class="content-block">
+        <p>我叫志辉，一名拥有十年经验的架构师，主要从事大数据方向的工作。作为一名资深程序员，我在职业生涯中涉猎广泛——前端、后端、爬虫，各种类型的开发都有丰富的实战经验，是大家口中的"全干工程师"。</p>
+      </div>
+
+      <div class="content-block">
+        <h3 class="content-block__title">工作经历</h3>
+        <p>目前在字节跳动担任高级前端工程师，主要负责抖音电商中台的前端架构设计与开发工作。从2022年加入字节跳动，已经工作了两年多。之前在美团和蚂蚁集团也积累了丰富的前端开发经验。</p>
+      </div>
+
+      <div class="content-block">
+        <h3 class="content-block__title">技术专长</h3>
+        <div class="skill-tags">
+          <span class="skill-tag">React 18</span>
+          <span class="skill-tag">TypeScript</span>
+          <span class="skill-tag">Next.js</span>
+          <span class="skill-tag">Tailwind CSS</span>
+          <span class="skill-tag">前端工程化</span>
+          <span class="skill-tag">性能优化</span>
+          <span class="skill-tag">组件库设计</span>
+          <span class="skill-tag">大数据架构</span>
+          <span class="skill-tag">Spark</span>
+          <span class="skill-tag">Flink</span>
+        </div>
+      </div>
+
+      <div class="content-block">
+        <h3 class="content-block__title">关于技术</h3>
+        <p>我最擅长的是React生态的前端开发，包括React 18、TypeScript、Next.js、Tailwind CSS等。我对前端工程化、组件库设计和性能优化也有比较丰富的经验。同时，我对AI应用开发非常感兴趣，目前了解和实践过的技术包括：LangChain框架、RAG（检索增强生成）、Prompt Engineering、向量数据库等。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Content: Services -->
+  <section class="content-section" id="services">
+    <div class="container content-section__inner">
+      <div class="content-section__header">
+        <a href="#cards" class="content-section__back">
+          <svg class="icon" viewBox="0 0 24 24" width="16" height="16"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+          返回
+        </a>
+        <h2 class="content-section__title">服务内容</h2>
+        <p class="content-section__subtitle">按需定制，灵活合作</p>
+      </div>
+
+      <div class="content-block">
+        <h3 class="content-block__title">前端开发</h3>
+        <ul class="service-list">
+          <li>
+            <div class="service-list__icon">
+              <svg class="icon" viewBox="0 0 24 24" width="20" height="20"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
+            </div>
+            <div class="service-list__content">
+              <h4>React 生态开发</h4>
+              <p>React 18、TypeScript、Next.js、Tailwind CSS 等现代前端技术栈</p>
+            </div>
+          </li>
+          <li>
+            <div class="service-list__icon">
+              <svg class="icon" viewBox="0 0 24 24" width="20" height="20"><circle cx="12" cy="12" r="10"/><path d="M8 12l2 2 4-4"/></svg>
+            </div>
+            <div class="service-list__content">
+              <h4>组件库设计</h4>
+              <p>基于 Headless UI 理念，设计可复用、可定制的组件系统</p>
+            </div>
+          </li>
+          <li>
+            <div class="service-list__icon">
+              <svg class="icon" viewBox="0 0 24 24" width="20" height="20"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            </div>
+            <div class="service-list__content">
+              <h4>前端工程化</h4>
+              <p>Webpack、Vite 构建优化，CI/CD 流水线设计，性能调优</p>
+            </div>
+          </li>
+        </ul>
+      </div>
+
+      <div class="content-block">
+        <h3 class="content-block__title">大数据技术栈</h3>
+        <ul class="service-list">
+          <li>
+            <div class="service-list__icon">
+              <svg class="icon" viewBox="0 0 24 24" width="20" height="20"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+            </div>
+            <div class="service-list__content">
+              <h4>数据计算引擎</h4>
+              <p>Apache Spark 批处理与流处理、Apache Flink 实时计算</p>
+            </div>
+          </li>
+          <li>
+            <div class="service-list__icon">
+              <svg class="icon" viewBox="0 0 24 24" width="20" height="20"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+            </div>
+            <div class="service-list__content">
+              <h4>数据存储</h4>
+              <p>Hive、ClickHouse、Doris、Kafka、数据湖 Iceberg/Hudi</p>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- Content: Cases -->
+  <section class="content-section" id="cases">
+    <div class="container content-section__inner">
+      <div class="content-section__header">
+        <a href="#cards" class="content-section__back">
+          <svg class="icon" viewBox="0 0 24 24" width="16" height="16"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+          返回
+        </a>
+        <h2 class="content-section__title">成功案例</h2>
+        <p class="content-section__subtitle">这些企业与项目，见证了合作的价值</p>
+      </div>
+
+      <div class="case-card">
+        <div class="case-card__meta">
+          <span class="case-card__tag">字节跳动</span>
+          <span class="case-card__tag">组件库</span>
+        </div>
+        <h3 class="case-card__title">DouyinUI 组件库</h3>
+        <p class="case-card__desc">在字节跳动主导开发的内部组件库，包含80+组件，服务于15个业务团队。基于Headless UI理念，支持主题定制，测试覆盖率达95%</p>
+        <div class="case-card__metrics">
+          <div class="case-card__metric">
+            <div class="case-card__metric-value">8000+</div>
+            <div class="case-card__metric-label">周下载量</div>
+          </div>
+          <div class="case-card__metric">
+            <div class="case-card__metric-value">92%</div>
+            <div class="case-card__metric-label">UI一致性</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="case-card">
+        <div class="case-card__meta">
+          <span class="case-card__tag">开源项目</span>
+          <span class="case-card__tag">笔记应用</span>
+        </div>
+        <h3 class="case-card__title">QuickNote - 极简笔记应用</h3>
+        <p class="case-card__desc">面向开发者的Markdown笔记应用，支持实时预览、Vim快捷键、全文搜索。基于Next.js 14 + PostgreSQL开发</p>
+        <div class="case-card__metrics">
+          <div class="case-card__metric">
+            <div class="case-card__metric-value">1200+</div>
+            <div class="case-card__metric-label">GitHub Stars</div>
+          </div>
+          <div class="case-card__metric">
+            <div class="case-card__metric-value">3000+</div>
+            <div class="case-card__metric-label">月活用户</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="case-card">
+        <div class="case-card__meta">
+          <span class="case-card__tag">开源项目</span>
+          <span class="case-card__tag">开发者工具</span>
+        </div>
+        <h3 class="case-card__title">DevDash - 开发者仪表盘</h3>
+        <p class="case-card__desc">实时监控开发流程的仪表盘，聚合GitHub、GitLab、Jira数据，支持WebSocket实时更新和自定义看板布局</p>
+        <div class="case-card__metrics">
+          <div class="case-card__metric">
+            <div class="case-card__metric-value">实时</div>
+            <div class="case-card__metric-label">数据推送</div>
+          </div>
+          <div class="case-card__metric">
+            <div class="case-card__metric-value">D3.js</div>
+            <div class="case-card__metric-label">可视化</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="case-card">
+        <div class="case-card__meta">
+          <span class="case-card__tag">开源项目</span>
+          <span class="case-card__tag">博客引擎</span>
+        </div>
+        <h3 class="case-card__title">Blog Engine - 静态博客引擎</h3>
+        <p class="case-card__desc">基于Astro构建的高性能博客引擎，支持MDX、代码高亮、RSS订阅。Lighthouse性能评分100分</p>
+        <div class="case-card__metrics">
+          <div class="case-card__metric">
+            <div class="case-card__metric-value">100</div>
+            <div class="case-card__metric-label">Lighthouse</div>
+          </div>
+          <div class="case-card__metric">
+            <div class="case-card__metric-value">Astro</div>
+            <div class="case-card__metric-label">框架</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Content: Blog -->
+  <section class="content-section" id="blog">
+    <div class="container content-section__inner">
+      <div class="content-section__header">
+        <a href="#cards" class="content-section__back">
+          <svg class="icon" viewBox="0 0 24 24" width="16" height="16"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+          返回
+        </a>
+        <h2 class="content-section__title">技术博客</h2>
+        <p class="content-section__subtitle">持续输出技术思考与实践总结</p>
+      </div>
+
+      <ul class="blog-list">
+        <li class="blog-item">
+          <div class="blog-item__date">
+            <div class="blog-item__day">15</div>
+            <div class="blog-item__month">Nov</div>
+          </div>
+          <div class="blog-item__content">
+            <h4>React 性能优化实战：从 3 秒到 300 毫秒的首屏加载之旅</h4>
+            <p>优化抖音电商商家后台首屏加载，从代码分割、请求并行化到虚拟滚动的完整实践</p>
+          </div>
+        </li>
+        <li class="blog-item">
+          <div class="blog-item__date">
+            <div class="blog-item__day">02</div>
+            <div class="blog-item__month">Mar</div>
+          </div>
+          <div class="blog-item__content">
+            <h4>技术选型：Vue vs React 怎么看？</h4>
+            <p>两个框架我都使用过，各有优势。聊聊如何根据项目特点做出选择</p>
+          </div>
+        </li>
+        <li class="blog-item">
+          <div class="blog-item__date">
+            <div class="blog-item__day">18</div>
+            <div class="blog-item__month">Jan</div>
+          </div>
+          <div class="blog-item__content">
+            <h4>组件库设计：基于 Headless UI 的实践</h4>
+            <p>DouyinUI 组件库的设计思路，逻辑与样式分离，如何实现主题定制</p>
+          </div>
+        </li>
+        <li class="blog-item">
+          <div class="blog-item__date">
+            <div class="blog-item__day">05</div>
+            <div class="blog-item__month">Dec</div>
+          </div>
+          <div class="blog-item__content">
+            <h4>AI 应用开发入门：LangChain 与 RAG 实践</h4>
+            <p>探索 AI 应用开发，从 LangChain 框架到检索增强生成的实践总结</p>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Contact Section -->
+  <section class="contact" id="contact">
+    <div class="container">
+      <h2 class="contact__title">开启合作</h2>
+      <p class="contact__desc">有合作意向或想了解更多？欢迎通过以下方式取得联系</p>
+      <a href="mailto:zhangming@example.com" class="contact__email">
+        <svg class="icon" viewBox="0 0 24 24" width="20" height="20"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        zhangming@example.com
+      </a>
+      <div class="social-links">
+        <a href="#" class="social-link" title="GitHub">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+        </a>
+        <a href="#" class="social-link" title="LinkedIn">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+        </a>
+        <a href="#" class="social-link" title="Twitter">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <p>Designed & Built by <span>Zhihui</span></p>
+    </div>
+  </footer>
+
+  <!-- ========================================
+       Chatbot Widget
+       ======================================== -->
+  <style>
+    /* --- Chat Bubble Button --- */
+    .chatbot-bubble {
+      position: fixed;
+      bottom: 28px;
+      right: 28px;
+      z-index: 1000;
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent-cyan), #0099cc);
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 24px rgba(0, 212, 255, 0.35);
+      transition: var(--transition-base);
+    }
+    .chatbot-bubble:hover {
+      transform: scale(1.08);
+      box-shadow: 0 6px 32px rgba(0, 212, 255, 0.5);
+    }
+    .chatbot-bubble svg {
+      width: 28px;
+      height: 28px;
+      fill: #fff;
+      transition: var(--transition-base);
+    }
+    .chatbot-bubble.active svg.icon-chat {
+      display: none;
+    }
+    .chatbot-bubble.active svg.icon-close {
+      display: block;
+    }
+    .chatbot-bubble:not(.active) svg.icon-close {
+      display: none;
+    }
+
+    /* --- Chat Panel --- */
+    .chatbot-panel {
+      position: fixed;
+      bottom: 100px;
+      right: 28px;
+      z-index: 999;
+      width: 380px;
+      max-height: 520px;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-subtle);
+      border-radius: 16px;
+      box-shadow: 0 12px 48px rgba(0, 0, 0, 0.5);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(16px) scale(0.96);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .chatbot-panel.open {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0) scale(1);
+    }
+
+    /* Panel Header */
+    .chatbot-header {
+      padding: 16px 20px;
+      background: rgba(0, 212, 255, 0.08);
+      border-bottom: 1px solid var(--border-subtle);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .chatbot-header__avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent-cyan), #0099cc);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .chatbot-header__avatar svg {
+      width: 20px;
+      height: 20px;
+      fill: #fff;
+    }
+    .chatbot-header__info h4 {
+      font-size: 0.9375rem;
+      font-weight: 600;
+      margin-bottom: 2px;
+    }
+    .chatbot-header__info span {
+      font-size: 0.75rem;
+      color: var(--accent-cyan);
+    }
+
+    /* Messages Area */
+    .chatbot-messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      min-height: 280px;
+      max-height: 360px;
+    }
+    .chatbot-messages::-webkit-scrollbar {
+      width: 4px;
+    }
+    .chatbot-messages::-webkit-scrollbar-thumb {
+      background: var(--border-subtle);
+      border-radius: 2px;
+    }
+
+    /* Message Bubbles */
+    .chat-msg {
+      max-width: 85%;
+      padding: 10px 14px;
+      border-radius: 12px;
+      font-size: 0.875rem;
+      line-height: 1.6;
+      animation: msgFadeIn 0.25s ease-out;
+    }
+    @keyframes msgFadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .chat-msg--bot {
+      align-self: flex-start;
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-primary);
+      border-bottom-left-radius: 4px;
+    }
+    .chat-msg--user {
+      align-self: flex-end;
+      background: var(--accent-cyan);
+      color: var(--bg-primary);
+      font-weight: 500;
+      border-bottom-right-radius: 4px;
+    }
+    .chat-msg--suggestion {
+      align-self: flex-start;
+      background: transparent;
+      border: 1px dashed var(--border-subtle);
+      color: var(--text-secondary);
+      font-size: 0.8125rem;
+      cursor: pointer;
+      transition: var(--transition-base);
+      padding: 8px 12px;
+    }
+    .chat-msg--suggestion:hover {
+      border-color: var(--accent-cyan);
+      color: var(--accent-cyan);
+    }
+
+    /* Typing Indicator */
+    .chat-typing {
+      display: flex;
+      gap: 4px;
+      padding: 12px 16px;
+      align-self: flex-start;
+    }
+    .chat-typing span {
+      width: 6px;
+      height: 6px;
+      background: var(--text-muted);
+      border-radius: 50%;
+      animation: typingBounce 1.2s ease-in-out infinite;
+    }
+    .chat-typing span:nth-child(2) { animation-delay: 0.15s; }
+    .chat-typing span:nth-child(3) { animation-delay: 0.3s; }
+    @keyframes typingBounce {
+      0%, 60%, 100% { transform: translateY(0); opacity: 0.4; }
+      30% { transform: translateY(-6px); opacity: 1; }
+    }
+
+    /* Input Area */
+    .chatbot-input {
+      padding: 12px 16px;
+      border-top: 1px solid var(--border-subtle);
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+    .chatbot-input input {
+      flex: 1;
+      padding: 10px 14px;
+      background: var(--bg-primary);
+      border: 1px solid var(--border-subtle);
+      border-radius: 8px;
+      color: var(--text-primary);
+      font-size: 0.875rem;
+      font-family: var(--font-body);
+      outline: none;
+      transition: var(--transition-base);
+    }
+    .chatbot-input input::placeholder {
+      color: var(--text-muted);
+    }
+    .chatbot-input input:focus {
+      border-color: var(--accent-cyan);
+    }
+    .chatbot-input button {
+      width: 40px;
+      height: 40px;
+      border-radius: 8px;
+      background: var(--accent-cyan);
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: var(--transition-base);
+      flex-shrink: 0;
+    }
+    .chatbot-input button:hover {
+      background: #33ddff;
+    }
+    .chatbot-input button svg {
+      width: 18px;
+      height: 18px;
+      fill: var(--bg-primary);
+    }
+
+    /* Responsive */
+    @media (max-width: 480px) {
+      .chatbot-panel {
+        right: 12px;
+        left: 12px;
+        bottom: 90px;
+        width: auto;
+        max-height: 70vh;
+      }
+      .chatbot-bubble {
+        bottom: 20px;
+        right: 20px;
+      }
+    }
+  </style>
+
+  <!-- Chatbot HTML -->
+  <button class="chatbot-bubble" id="chatBubble" aria-label="打开问答助手">
+    <svg class="icon-chat" viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+    <svg class="icon-close" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+  </button>
+
+  <div class="chatbot-panel" id="chatPanel">
+    <div class="chatbot-header">
+      <div class="chatbot-header__avatar">
+        <svg viewBox="0 0 24 24"><path d="M12 2a2 2 0 0 1 2 2c0 .74-.4 1.39-1 1.73V7h1a7 7 0 0 1 7 7h1a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-1.07A7 7 0 0 1 13 23h-2a7 7 0 0 1-6.93-4H3a1 1 0 0 1-1-1v-3a1 1 0 0 1 1-1h1a7 7 0 0 1 7-7h1V5.73c-.6-.34-1-.99-1-1.73a2 2 0 0 1 2-2zM9 14a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zm6 0a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3z"/></svg>
+      </div>
+      <div class="chatbot-header__info">
+        <h4>志辉的AI助手</h4>
+        <span>● 在线 · 基于知识库</span>
+      </div>
+    </div>
+    <div class="chatbot-messages" id="chatMessages">
+      <!-- Messages will be injected here -->
+    </div>
+    <div class="chatbot-input">
+      <input type="text" id="chatInput" placeholder="输入你的问题..." autocomplete="off" />
+      <button id="chatSend" aria-label="发送">
+        <svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <script>
+    // Card click handler - show/hide content sections
+    document.querySelectorAll('[data-card]').forEach(card => {
+      card.addEventListener('click', (e) => {
+        e.preventDefault();
+        const targetId = card.getAttribute('href').substring(1);
+        const targetSection = document.getElementById(targetId);
+        
+        // Hide all content sections
+        document.querySelectorAll('.content-section').forEach(section => {
+          section.classList.remove('active');
+        });
+        
+        // Show target section
+        if (targetSection) {
+          targetSection.classList.add('active');
+          // Smooth scroll to section
+          targetSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      });
+    });
+
+    // Back button handler
+    document.querySelectorAll('.content-section__back').forEach(backBtn => {
+      backBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        const cardsSection = document.getElementById('cards');
+        if (cardsSection) {
+          cardsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      });
+    });
+
+    // Navbar background on scroll
+    const nav = document.querySelector('.nav');
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 50) {
+        nav.style.background = 'rgba(10, 22, 40, 0.95)';
+        nav.style.backdropFilter = 'blur(12px)';
+      } else {
+        nav.style.background = 'linear-gradient(to bottom, var(--bg-primary), transparent)';
+        nav.style.backdropFilter = 'none';
+      }
+    });
+
+    // Smooth scroll for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function(e) {
+        const href = this.getAttribute('href');
+        // Skip if it's a data-card link (handled above)
+        if (this.hasAttribute('data-card')) return;
+        
+        const target = document.querySelector(href);
+        if (target) {
+          e.preventDefault();
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      });
+    });
+
+    // ========================================
+    // Chatbot Knowledge Base & Engine
+    // ========================================
+    (function() {
+      const knowledgeBase = [
+        // --- 关于工作 ---
+        {
+          keywords: ['公司', '在哪', '哪里工作', '字节', '字节跳动', '目前'],
+          answer: '我目前在字节跳动担任高级前端工程师，主要负责抖音电商中台的前端架构设计与开发工作。从2022年加入，已经工作了两年多。'
+        },
+        {
+          keywords: ['工作内容', '做什么', '日常', '职责'],
+          answer: '我的日常工作包括：技术方案设计与评审、核心模块的代码开发、组件库的维护与迭代、带领小组成员进行代码审查，以及参与前端基础设施的建设。'
+        },
+        {
+          keywords: ['经验', '几年', '多久', '工作年限'],
+          answer: '我从2018年本科毕业后开始工作，到现在有6年的前端开发经验。先后在美团、蚂蚁集团和字节跳动工作过。'
+        },
+        {
+          keywords: ['美团', '蚂蚁', '经历', '履历'],
+          answer: '我的工作经历：先后在美团、蚂蚁集团和字节跳动工作过，目前字节跳动担任高级前端工程师，主要负责抖音电商中台。'
+        },
+        // --- 关于技术 ---
+        {
+          keywords: ['擅长', '最擅长', '专长', '技术方向'],
+          answer: '我最擅长的是React生态的前端开发，包括React 18、TypeScript、Next.js、Tailwind CSS等。我对前端工程化、组件库设计和性能优化也有比较丰富的经验。'
+        },
+        {
+          keywords: ['vue', 'react', '对比', '区别', '哪个好', '怎么看'],
+          answer: '两个框架我都使用过，各有优势。Vue的学习曲线更平缓，模板语法直观，适合快速开发中小型项目。React的灵活性更强，生态更庞大，在大型复杂项目中优势明显。目前我个人更偏好React + TypeScript的组合。'
+        },
+        {
+          keywords: ['ai', '人工智能', 'langchain', 'rag', '大模型', '向量数据库'],
+          answer: '我对AI应用开发非常感兴趣，目前了解和实践过的技术包括：LangChain框架、RAG（检索增强生成）、Prompt Engineering、向量数据库（Pinecone、ChromaDB）。我也在学习使用扣子（Coze）平台搭建AI智能体。'
+        },
+        {
+          keywords: ['typescript', 'ts', '类型'],
+          answer: '我日常开发中使用TypeScript，配合React开发体验非常好，类型推导能力强，能有效减少运行时错误。DouyinUI组件库就提供了完整的TypeScript类型定义。'
+        },
+        {
+          keywords: ['next.js', 'nextjs', 'next'],
+          answer: '我使用Next.js开发了QuickNote笔记应用（Next.js 14 + Prisma + PostgreSQL），对App Router、Server Components等特性有实践经验。'
+        },
+        {
+          keywords: ['tailwind', 'css', '样式'],
+          answer: '我使用Tailwind CSS进行样式开发，DouyinUI组件库就通过CSS Variables + Tailwind实现了动态换肤功能。'
+        },
+        {
+          keywords: ['性能优化', '优化', '加载', '首屏'],
+          answer: '我在优化抖音电商商家后台时，将首屏加载从3秒优化到300毫秒。主要手段包括：代码分割与Tree Shaking、请求并行化与预加载、虚拟滚动避免重复渲染、字体子集化和图片懒加载。'
+        },
+        {
+          keywords: ['大数据', 'spark', 'flink', '数据'],
+          answer: '我有十年大数据方向的架构经验，熟悉Apache Spark（批处理与流处理）、Apache Flink（实时计算）、Hadoop生态。数据存储方面熟悉Hive、ClickHouse、Doris、Kafka、数据湖Iceberg/Hudi等。'
+        },
+        {
+          keywords: ['后端', 'java', 'python', '爬虫'],
+          answer: '我具备全栈开发能力。后端方面擅长Java生态（Spring Boot/Cloud）和Python生态（Flask/FastAPI/Pandas），也有大规模爬虫系统的设计开发经验。'
+        },
+        {
+          keywords: ['架构', '架构师', '架构设计'],
+          answer: '我是一名拥有十年经验的架构师，专注于系统整体设计与技术选型，包括微服务架构拆分与治理、性能优化与系统稳定性保障。'
+        },
+        // --- 关于项目 ---
+        {
+          keywords: ['douyinui', '组件库', 'douyin', '抖音ui'],
+          answer: 'DouyinUI是我在字节跳动主导开发的内部组件库，包含80+组件，服务于15个业务团队。基于Headless UI理念设计，支持主题定制，测试覆盖率达95%，公司内部npm周下载量8000+。'
+        },
+        {
+          keywords: ['quicknote', '笔记', '笔记应用'],
+          answer: 'QuickNote是我开发的开源Markdown笔记应用，基于Next.js 14 + PostgreSQL。支持实时预览、Vim快捷键、全文搜索、PWA离线使用。GitHub Star 1200+，月活跃用户3000+。'
+        },
+        {
+          keywords: ['devdash', '仪表盘', 'dashboard'],
+          answer: 'DevDash是我开发的开源实时监控仪表盘，聚合GitHub、GitLab、Jira等平台数据。通过WebSocket推送实时更新，支持自定义看板布局，数据可视化使用D3.js。'
+        },
+        {
+          keywords: ['blog', '博客', 'blog engine', '博客引擎'],
+          answer: 'Blog Engine是我开发的高性能静态博客引擎，基于Astro构建，支持MDX、代码高亮、目录生成、RSS订阅。Lighthouse性能评分100分。'
+        },
+        {
+          keywords: ['开源', 'github', '项目地址'],
+          answer: '我的开源项目包括：QuickNote笔记应用（Star 1200+）、DevDash开发者仪表盘、Blog Engine静态博客引擎。都可以在我的GitHub主页找到。'
+        },
+        {
+          keywords: ['quicknote灵感', '为什么做', '动机'],
+          answer: '作为开发者，我每天需要记录大量技术笔记和代码片段。试用了很多笔记应用后，发现没有一个完全满足我的需求——既要支持Markdown、又要有好用的搜索、还要支持Vim快捷键，所以我决定自己做一个。'
+        },
+        // --- 关于合作 ---
+        {
+          keywords: ['兼职', '自由职业', '接单', '外包'],
+          answer: '目前我主要精力在全职工作和个人项目上，暂时不接受兼职项目。但如果是有趣的开源项目合作，我很乐意参与，可以通过邮箱 zhangming@example.com 联系我。'
+        },
+        {
+          keywords: ['分享', '演讲', '技术分享', '会议', '社区'],
+          answer: '非常愿意！我曾在公司内部做过多次技术分享，主题包括React性能优化、前端微服务架构、组件库设计等。如果有技术社区或会议的分享邀请，欢迎通过邮箱联系我。'
+        },
+        {
+          keywords: ['联系', '邮箱', '怎么联系', '如何联系'],
+          answer: '可以通过邮箱 zhangming@example.com 联系我，也欢迎在GitHub上关注我的开源项目。'
+        },
+        // --- 关于个人 ---
+        {
+          keywords: ['你好', '嗨', 'hello', 'hi', '你是谁', '介绍'],
+          answer: '你好！我是志辉，一名拥有十年经验的架构师，目前在字节跳动担任高级前端工程师。我专注React生态、前端工程化与性能优化，同时也是大数据领域的资深从业者。有什么想了解的，尽管问我！'
+        },
+        {
+          keywords: ['全栈', '全干', '全干工程师'],
+          answer: '是的，我在职业生涯中涉猎广泛——前端、后端、爬虫，各种类型的开发都有丰富的实战经验，是大家口中的"全干工程师"。'
+        },
+        {
+          keywords: ['个人项目', '时间', '规划', '怎么规划'],
+          answer: '我通常在工作日晚上和周末抽时间做个人项目。用GitHub Issues管理需求，每周设定一个小目标，保持持续迭代。关键是保持节奏，不贪多，每次聚焦一个小功能。'
+        },
+        {
+          keywords: ['前端工程化', '工程化', 'webpack', 'vite', '构建'],
+          answer: '我在前端工程化方面有丰富经验，熟悉Webpack和Vite构建优化、CI/CD流水线设计。DouyinUI组件库的构建体系就是由我主导设计的。'
+        },
+        {
+          keywords: ['微前端', '微服务', '前端架构'],
+          answer: '我对前端微服务架构有实践经验，擅长微服务架构拆分与治理、事件驱动架构、CQRS模式等。'
+        },
+        {
+          keywords: ['容器', 'docker', 'k8s', 'kubernetes', '运维'],
+          answer: '我熟悉容器化技术（Docker、Kubernetes），云平台（阿里云、AWS），以及监控体系（Prometheus、Grafana、ELK）。'
+        },
+        {
+          keywords: ['可视化', 'echarts', 'd3', '大屏'],
+          answer: '我使用ECharts和D3.js进行数据可视化开发，包括大屏可视化方案。DevDash项目中的趋势图、热力图、甘特图就是用D3.js实现的。'
+        }
+      ];
+
+      // --- Matching Engine ---
+      function findAnswer(query) {
+        const q = query.toLowerCase().replace(/[？?！!。，,\s]+/g, '');
+        let bestMatch = null;
+        let bestScore = 0;
+
+        for (const item of knowledgeBase) {
+          let score = 0;
+          for (const kw of item.keywords) {
+            if (q.includes(kw.toLowerCase())) {
+              // Longer keyword match = higher score
+              score += kw.length;
+            }
+          }
+          if (score > bestScore) {
+            bestScore = score;
+            bestMatch = item;
+          }
+        }
+
+        if (bestMatch && bestScore >= 2) {
+          return bestMatch.answer;
+        }
+        return null;
+      }
+
+      const fallbackSuggestions = [
+        '你在哪家公司工作？',
+        '你最擅长什么技术？',
+        '介绍一下DouyinUI组件库',
+        'Vue和React你怎么看？',
+        '你接受兼职吗？',
+        '你有哪些开源项目？'
+      ];
+
+      const fallbackMsg = '抱歉，这个问题我暂时还不知道答案。你可以试试问我以下问题：';
+
+      // --- UI Logic ---
+      const bubble = document.getElementById('chatBubble');
+      const panel = document.getElementById('chatPanel');
+      const messages = document.getElementById('chatMessages');
+      const input = document.getElementById('chatInput');
+      const sendBtn = document.getElementById('chatSend');
+
+      let isOpen = false;
+
+      function toggleChat() {
+        isOpen = !isOpen;
+        panel.classList.toggle('open', isOpen);
+        bubble.classList.toggle('active', isOpen);
+        if (isOpen && messages.children.length === 0) {
+          showWelcome();
+        }
+        if (isOpen) {
+          setTimeout(() => input.focus(), 300);
+        }
+      }
+
+      function showWelcome() {
+        addBotMessage('你好！我是志辉的AI助手，基于他的个人资料知识库为你解答问题。你可以问我关于他的工作、技术栈、项目经历等方面的问题。');
+        // Show 3 random suggestions
+        const shuffled = fallbackSuggestions.sort(() => 0.5 - Math.random());
+        shuffled.slice(0, 3).forEach(s => addSuggestion(s));
+      }
+
+      function addBotMessage(text) {
+        const div = document.createElement('div');
+        div.className = 'chat-msg chat-msg--bot';
+        div.textContent = text;
+        messages.appendChild(div);
+        messages.scrollTop = messages.scrollHeight;
+      }
+
+      function addUserMessage(text) {
+        const div = document.createElement('div');
+        div.className = 'chat-msg chat-msg--user';
+        div.textContent = text;
+        messages.appendChild(div);
+        messages.scrollTop = messages.scrollHeight;
+      }
+
+      function addSuggestion(text) {
+        const div = document.createElement('div');
+        div.className = 'chat-msg chat-msg--suggestion';
+        div.textContent = '💡 ' + text;
+        div.addEventListener('click', () => {
+          // Remove all suggestions
+          messages.querySelectorAll('.chat-msg--suggestion').forEach(s => s.remove());
+          handleUserInput(text);
+        });
+        messages.appendChild(div);
+        messages.scrollTop = messages.scrollHeight;
+      }
+
+      function showTyping() {
+        const div = document.createElement('div');
+        div.className = 'chat-typing';
+        div.id = 'typingIndicator';
+        div.innerHTML = '<span></span><span></span><span></span>';
+        messages.appendChild(div);
+        messages.scrollTop = messages.scrollHeight;
+      }
+
+      function removeTyping() {
+        const el = document.getElementById('typingIndicator');
+        if (el) el.remove();
+      }
+
+      function handleUserInput(text) {
+        if (!text.trim()) return;
+        addUserMessage(text);
+        input.value = '';
+
+        // Remove existing suggestions
+        messages.querySelectorAll('.chat-msg--suggestion').forEach(s => s.remove());
+
+        showTyping();
+
+        // Simulate response delay
+        setTimeout(() => {
+          removeTyping();
+          const answer = findAnswer(text);
+          if (answer) {
+            addBotMessage(answer);
+          } else {
+            addBotMessage(fallbackMsg);
+            const shuffled = fallbackSuggestions.sort(() => 0.5 - Math.random());
+            shuffled.slice(0, 3).forEach(s => addSuggestion(s));
+          }
+        }, 500 + Math.random() * 400);
+      }
+
+      // Event listeners
+      bubble.addEventListener('click', toggleChat);
+
+      sendBtn.addEventListener('click', () => {
+        handleUserInput(input.value);
+      });
+
+      input.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' && !e.shiftKey) {
+          e.preventDefault();
+          handleUserInput(input.value);
+        }
+      });
+    })();
+  </script>
+</body>
+</html>
